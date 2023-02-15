@@ -42,11 +42,14 @@ type {{ .Query.Name | go }} {{ .Query.Type | ref }}
 	type  {{ .Name | go  }} {{ .Type | ref }}
 
 {{- $structName := .Name|go }}
+{{- $structType := .Type }}
 {{- range $i, $field := .Type|getters }}
-func (t *{{ $structName | go  }}) Get{{ $field.Name }}() {{ $field.ReturnType }} {
+func (t {{ if $structType|isPointer }}*{{ end}}{{ $structName | go  }}) Get{{ $field.Name }}() {{ $field.ReturnType }} {
+    {{ if $structType|isPointer }}
     if t == nil {
         t =  &{{ $structName }}{}
     }
+    {{ end}}
     return t.{{ $field.Name }}
 
 }
@@ -57,11 +60,14 @@ func (t *{{ $structName | go  }}) Get{{ $field.Name }}() {{ $field.ReturnType }}
 	type {{ .Name }} {{ .Type | ref }}
 
 {{- $structName := .Name }}
+{{- $structType := .Type }}
 {{- range $i, $field := .Type|getters }}
-func (t *{{ $structName  }}) Get{{ $field.Name }}() {{ $field.ReturnType }} {
+func (t {{ if $structType|isPointer }}*{{ end}}{{ $structName  }}) Get{{ $field.Name }}() {{ $field.ReturnType }} {
+    {{ if $structType|isPointer }}
     if t == nil {
         t =  &{{ $structName }}{}
     }
+    {{ end}}
     return t.{{ $field.Name }}
 
 }
@@ -72,11 +78,14 @@ func (t *{{ $structName  }}) Get{{ $field.Name }}() {{ $field.ReturnType }} {
 	type  {{ .Name | go  }} {{ .Type | ref }}
 
 {{- $structName := .Name|go }}
+{{- $structType := .Type }}
 {{- range $i, $field := .Type|getters }}
-func (t *{{ $structName | go  }}) Get{{ $field.Name }}() {{ $field.ReturnType }} {
+func (t {{ if $structType|isPointer }}*{{ end}}{{ $structName | go  }}) Get{{ $field.Name }}() {{ $field.ReturnType }} {
+    {{ if $structType|isPointer }}
     if t == nil {
         t =  &{{ $structName }}{}
     }
+    {{ end}}
     return t.{{ $field.Name }}
 
 }
