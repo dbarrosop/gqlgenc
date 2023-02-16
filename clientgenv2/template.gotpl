@@ -41,55 +41,19 @@ type {{ .Query.Name | go }} {{ .Query.Type | ref }}
 {{- range $name, $element := .Fragment }}
 	type  {{ .Name | go  }} {{ .Type | ref }}
 
-{{- $structName := .Name|go }}
-{{- $structType := .Type }}
-{{- range $i, $field := .Type|getters }}
-func (t {{ if $structType|isPointer }}*{{ end}}{{ $structName | go  }}) Get{{ $field.Name }}() {{ $field.ReturnType }} {
-    {{ if $structType|isPointer }}
-    if t == nil {
-        t =  &{{ $structName }}{}
-    }
-    {{ end}}
-    return t.{{ $field.Name }}
-
-}
-{{- end }}
+    {{ genGetters (.Name|go) .Type }}
 {{- end }}
 
 {{- range $name, $element := .StructSources }}
 	type {{ .Name }} {{ .Type | ref }}
 
-{{- $structName := .Name }}
-{{- $structType := .Type }}
-{{- range $i, $field := .Type|getters }}
-func (t {{ if $structType|isPointer }}*{{ end}}{{ $structName  }}) Get{{ $field.Name }}() {{ $field.ReturnType }} {
-    {{ if $structType|isPointer }}
-    if t == nil {
-        t =  &{{ $structName }}{}
-    }
-    {{ end}}
-    return t.{{ $field.Name }}
-
-}
-{{- end}}
+    {{ genGetters .Name .Type }}
 {{- end}}
 
 {{- range $name, $element := .OperationResponse }}
 	type  {{ .Name | go  }} {{ .Type | ref }}
 
-{{- $structName := .Name|go }}
-{{- $structType := .Type }}
-{{- range $i, $field := .Type|getters }}
-func (t {{ if $structType|isPointer }}*{{ end}}{{ $structName | go  }}) Get{{ $field.Name }}() {{ $field.ReturnType }} {
-    {{ if $structType|isPointer }}
-    if t == nil {
-        t =  &{{ $structName }}{}
-    }
-    {{ end}}
-    return t.{{ $field.Name }}
-
-}
-{{- end }}
+    {{ genGetters (.Name|go) .Type }}
 {{- end }}
 
 {{- range $model := .Operation}}
